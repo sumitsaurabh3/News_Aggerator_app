@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_aggerator_app/home.dart';
-
+import 'package:http/http.dart';
 void main() {
   runApp(MyApp());
 }

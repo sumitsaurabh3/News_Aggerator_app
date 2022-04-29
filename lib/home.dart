@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news_aggerator_app/category.dart';
 import 'package:news_aggerator_app/main.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'package:news_aggerator_app/model.dart';
+import 'package:http/http.dart';
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -13,7 +17,54 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController searchController = new TextEditingController();
+  List<NewsQueryModel> newsModelList=<NewsQueryModel>[];
+  List<NewsQueryModel> newsModelListCarousel =<NewsQueryModel>[];
   List<String> navBarItem = ["Top News", "India", "World", "Finance", "Health"];
+  bool isLoading=true;
+  getNewsByQuery(String query) async {
+    String url="https://newsapi.org/v2/everything?q=india&from=2022-04-28&to=2022-04-28&sortBy=popularity&apiKey=e34926a382604b1aa2934000a1aae7db";
+  Response response=await get(Uri.parse(url));
+  Map data= jsonDecode(response.body);
+  setState(() {
+    data["articles"].forEach((element){
+      NewsQueryModel newsQueryModel =new NewsQueryModel();
+      newsQueryModel =NewsQueryModel.fromMap(element);
+      newsModelList.add(newsQueryModel);
+      setState(() {
+        isLoading=false;
+        
+      });
+
+    });
+  });
+
+  }
+  getNewsofIndia() async{
+    String url="https://newsapi.org/v2/top-headlines?country=in&apiKey=e34926a382604b1aa2934000a1aae7db";
+    Response response = await get(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    setState(() {
+      data["articles"].forEach((element) {
+        NewsQueryModel newsQueryModel = new NewsQueryModel();
+        newsQueryModel = NewsQueryModel.fromMap(element);
+        newsModelListCarousel.add(newsQueryModel);
+        setState(() {
+          isLoading = false;
+        });
+
+      });
+    });
+
+
+  }
+  @override
+  void initState(){
+    super.initState();
+    getNewsByQuery('India');
+    getNewsofIndia();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +114,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             Container(
-              height: 60,
+              height: 50,
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -71,12 +122,12 @@ class _HomeState extends State<Home> {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        print(navBarItem[index]);
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Category(Query: navBarItem[index])));
                       },
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        margin: EdgeInsets.symmetric(horizontal: 3),
+                        margin: EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(5)),
@@ -84,9 +135,10 @@ class _HomeState extends State<Home> {
                           child: Text(
                             navBarItem[index],
                             style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 19,
                               color: Colors.white,
+                              fontWeight: FontWeight.bold,
+
                             ),
                           ),
                         ),
@@ -102,7 +154,7 @@ class _HomeState extends State<Home> {
                   autoPlay: true,
                   enlargeCenterPage: true,
                 ),
-                items: items.map((item) {
+                items: newsModelListCarousel.map((instance) {
                   return Builder(builder: (BuildContext context) {
                     return Container(
 
@@ -114,7 +166,7 @@ class _HomeState extends State<Home> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset("images/breaking_news.jpg",fit: BoxFit.fitHeight,height: double.infinity,),
+                              child: Image.network((instance.newsImg),fit: BoxFit.fitHeight,width: double.infinity,),
                             ),
                             Positioned(
                               left: 0,
@@ -134,9 +186,10 @@ class _HomeState extends State<Home> {
                                 ),
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
-                             child:  Text("News Headline",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold)),
+                             child:  Container(margin: EdgeInsets.symmetric(horizontal: 10),child: Text(instance.newsHead,style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold)),
                             ),
                               ),
+                            ),
                             ),
                           ],
                         ),
@@ -160,8 +213,9 @@ class _HomeState extends State<Home> {
                   ),
                   ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: 3,
                       shrinkWrap: true,
+                      itemCount: newsModelList.length,
+
                       itemBuilder: (context, index) {
                         return Container(
                           margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -174,7 +228,7 @@ class _HomeState extends State<Home> {
                               children: [
                                 ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
-                                    child: Image.asset("images/breaking_news.jpg")),
+                                    child: Image.network(newsModelList[index].newsImg,fit: BoxFit.fitHeight,height:230,width: double.infinity,),),
                                 Positioned(
                                     left: 0,
                                     right: 0,
@@ -196,13 +250,13 @@ class _HomeState extends State<Home> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "NEWS HEADLINE",
+                                              newsModelList[index].newsHead,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            Text("Description this news",style: TextStyle(color: Colors.white,fontSize: 12),)
+                                            Text(newsModelList[index].newsDes.length > 50 ? "${newsModelList[index].newsDes.substring(0,55)}...." : newsModelList[index].newsDes,style: TextStyle(color: Colors.white,fontSize: 12),),
                                           ],
                                         )
                                         )),
@@ -229,5 +283,5 @@ class _HomeState extends State<Home> {
     );
   }
 
-  final List items = ["juuu","hggg","kjjkh","jknj"];
+  final List items = ["juuu","hggg","kjjkh"];
 }
