@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
   TextEditingController searchController = new TextEditingController();
   List<NewsQueryModel> newsModelList=<NewsQueryModel>[];
   List<NewsQueryModel> newsModelListCarousel =<NewsQueryModel>[];
-  List<String> navBarItem = ["Top News", "India", "World", "Finance", "Health"];
+  List<String> navBarItem = ["Top News","Business", "Health" ,"Sports", "Technology"];
   bool isLoading=true;
   getNewsByQuery(String query) async {
     String url="https://newsapi.org/v2/everything?q=india&from=2022-04-28&to=2022-04-28&sortBy=popularity&apiKey=e34926a382604b1aa2934000a1aae7db";
