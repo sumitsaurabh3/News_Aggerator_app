@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:news_aggerator_app/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -20,11 +20,12 @@ class _CategoryState extends State<Category> {
       if(query=="Top News"){
         url="https://newsapi.org/v2/top-headlines?language=en&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
-      if(query=="Health" ){
-      url="https://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=e34926a382604b1aa2934000a1aae7db";}
       if(query=="Business"){
-        url="https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=e34926a382604b1aa2934000a1aae7db";
+        url="https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
+      if(query=="Health" ){
+      url="https://newsapi.org/v2/top-headlines?language=en&country=in&category=health&apiKey=e34926a382604b1aa2934000a1aae7db";}
+
       if(query=="Sports"){
          url="https://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
@@ -77,13 +78,15 @@ class _CategoryState extends State<Category> {
                 ), ],
             ),
           ),
+                  isLoading ? Container(height: MediaQuery.of(context).size.height-500,child: Center(child: CircularProgressIndicator(),),):
           ListView.builder(
           physics: NeverScrollableScrollPhysics(),
     shrinkWrap: true,
     itemCount: newsModelList.length,
 
     itemBuilder: (context, index) {
-      return Container(
+      return
+        Container(
           margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Card(
             shape: RoundedRectangleBorder(
@@ -139,10 +142,7 @@ class _CategoryState extends State<Category> {
       );
     }
   ),
-
-
-
-    ],
+  ],
     )),
         )
     );
