@@ -2,21 +2,27 @@ import 'dart:convert';
 import 'package:news_aggerator_app/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'NewsView.dart';
 import 'model.dart';
 class Category extends StatefulWidget {
-
   String Query;
    Category({required this.Query});
   @override
   _CategoryState createState() => _CategoryState();
+
+
+
 }
 
 class _CategoryState extends State<Category> {
+
   List<NewsQueryModel> newsModelList=<NewsQueryModel>[];
   bool isLoading=true;
+
   getNewsByQuery(String query) async {
-      String url=" ";
+      String url;
+
       if(query=="Top News"){
         url="https://newsapi.org/v2/top-headlines?language=en&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
@@ -31,6 +37,9 @@ class _CategoryState extends State<Category> {
       }
       if(query=="Technology"){
         url="https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=e34926a382604b1aa2934000a1aae7db";
+      }
+      else{
+        url="https://newsapi.org/v2/top-headlines?country=in&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
 
     Response response=await get(Uri.parse(url));
@@ -86,60 +95,73 @@ class _CategoryState extends State<Category> {
 
     itemBuilder: (context, index) {
       return
-        Container(
+
+
+           InkWell(
+             onTap: () {
+               Navigator.push(
+                   context,
+                   MaterialPageRoute(
+                       builder: (context) => NewsView(
+                           newsModelList[index].newsUrl)));
+
+             },
+             child: Container(
+
           margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            elevation: 1.0,
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    newsModelList[index].newsImg, fit: BoxFit.fitHeight,
-                    height: 230,
-                    width: double.infinity,),),
-                Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              elevation: 1.0,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      newsModelList[index].newsImg, fit: BoxFit.fitHeight,
+                      height: 230,
+                      width: double.infinity,),),
+                  Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
 
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.black12.withOpacity(0),
-                                Colors.black,
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            )),
-                        padding: EdgeInsets.fromLTRB(15, 15, 10, 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              newsModelList[index].newsHead,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(newsModelList[index].newsDes.length > 50
-                                ? "${newsModelList[index].newsDes.substring(
-                                0, 55)}...."
-                                : newsModelList[index].newsDes, style: TextStyle(
-                                color: Colors.white, fontSize: 12),),
-                          ],
-                        )
-                    )),
-              ],
-            ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.black12.withOpacity(0),
+                                  Colors.black,
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              )),
+                          padding: EdgeInsets.fromLTRB(15, 15, 10, 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                newsModelList[index].newsHead,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(newsModelList[index].newsDes.length > 50
+                                  ? "${newsModelList[index].newsDes.substring(
+                                  0, 55)}...."
+                                  : newsModelList[index].newsDes, style: TextStyle(
+                                  color: Colors.white, fontSize: 12),),
+                            ],
+                          )
+                      )),
+                ],
+              ),
           ),
-      );
+      ),
+           );
     }
   ),
   ],
