@@ -26,20 +26,20 @@ class _CategoryState extends State<Category> {
       if(query=="Top News"){
         url="https://newsapi.org/v2/top-headlines?language=en&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
-      if(query=="Business"){
+     else if(query=="Business"){
         url="https://newsapi.org/v2/top-headlines?category=business&language=en&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
-      if(query=="Health" ){
+    else  if(query=="Health" ){
       url="https://newsapi.org/v2/top-headlines?language=en&country=in&category=health&apiKey=e34926a382604b1aa2934000a1aae7db";}
 
-      if(query=="Sports"){
+     else if(query=="Sports"){
          url="https://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
-      if(query=="Technology"){
+    else  if(query=="Technology"){
         url="https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
       else{
-        url="https://newsapi.org/v2/top-headlines?country=in&apiKey=e34926a382604b1aa2934000a1aae7db";
+        url="https://newsapi.org/v2/everything?q=$query&from=2022-04-28&sortBy=publishedAt&apiKey=e34926a382604b1aa2934000a1aae7db";
       }
 
     Response response=await get(Uri.parse(url));
