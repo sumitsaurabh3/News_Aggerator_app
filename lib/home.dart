@@ -1,13 +1,19 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:news_aggerator_app/NewsView.dart';
+import 'package:news_aggerator_app/Popup%20Button/Privacy_Policy.dart';
 import 'package:news_aggerator_app/category.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:news_aggerator_app/model.dart';
 import 'package:http/http.dart';
 import 'package:news_aggerator_app/secondScreen.dart';
 import 'NavBar.dart';
-
+import 'Popup Button/About.dart';
+import 'Popup Button/ContactUs.dart';
+enum MenuItem{
+  About,Privacy_Policy,Contact_us
+}
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -98,6 +104,33 @@ class _HomeState extends State<Home> {
         title: Text("MY NEWS"),
         centerTitle: true,
         backgroundColor: Colors.red,
+
+        actions: [
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: PopupMenuButton<MenuItem>(onSelected: (value){
+                if(value==MenuItem.About){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>About()));
+                }
+               else if(value==MenuItem.Privacy_Policy){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PrivacyPolicy()));
+                }
+               else if(value==MenuItem.Contact_us){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ContactUs()));
+                }
+            },
+              itemBuilder: (context)=>[
+              PopupMenuItem(child: Text("About",style: TextStyle(fontSize: 20),),
+                value: MenuItem.About,
+              ),
+              PopupMenuItem(child: Text("Privacy Policy",style: TextStyle(fontSize: 20),),
+                value:MenuItem.Privacy_Policy,),
+              PopupMenuItem(child: Text("Contact us",style: TextStyle(fontSize: 20),),
+              value: MenuItem.Contact_us,),
+            ]),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
