@@ -22,12 +22,12 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.red,
         child: ListView(
           children: [
             ListTile(
-                leading: Icon(Icons.add),
-                title: Text('Weather'),
+
+                title: Text('Weather',style: TextStyle(color: Colors.white,fontSize:15,),),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -38,8 +38,8 @@ class _NavBarState extends State<NavBar> {
                 }
             ),
             ListTile(
-                leading: Icon(Icons.add),
-                title: Text('Maps'),
+               // leading: Icon(Icons.add),
+                title: Text('Maps',style: TextStyle(color: Colors.white,fontSize:15,),),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -50,8 +50,8 @@ class _NavBarState extends State<NavBar> {
                 }
             ),
             ListTile(
-                leading: Icon(Icons.add),
-                title: Text('Current Affairs'),
+              //  leading: Icon(Icons.add),
+                title: Text('Current Affairs',style: TextStyle(color: Colors.white,fontSize:15,),),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -62,8 +62,8 @@ class _NavBarState extends State<NavBar> {
                 }
             ),
             ListTile(
-                leading: Icon(Icons.add),
-                title: Text('Stock Market'),
+              //  leading: Icon(Icons.add),
+                title: Text('Stock Market',style: TextStyle(color: Colors.white,fontSize:15,),),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -74,8 +74,8 @@ class _NavBarState extends State<NavBar> {
                 }
             ),
             ListTile(
-                leading: Icon(Icons.add),
-                title: Text('More News'),
+             //   leading: Icon(Icons.add),
+                title: Text('More News',style: TextStyle(color: Colors.white,fontSize:15,),),
                 onTap: () {
                   Navigator.push(
                     context,

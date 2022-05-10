@@ -15,9 +15,11 @@ class _drawerS1State extends State<drawerS1> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          appBar: AppBar(
-            title: Text("Weather"),
-            backgroundColor: Colors.lightBlue,
+          endDrawerEnableOpenDragGesture: false,
+          appBar:new AppBar(
+
+            title: Text("Weather",style: TextStyle(color: Colors.white,),),
+            backgroundColor: Colors.white,
           ),
           body: Container(
             height: double.infinity,
